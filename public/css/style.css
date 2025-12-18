@@ -1,0 +1,216 @@
+/* ========================================================================================== */
+/*                                       ROOT COLORS                                        */
+/* ========================================================================================== */
+:root {
+  --primary-color: #4361ee; /* Vibrant blue - main buttons, links */
+  --secondary-color: #3f37c9; /* Deeper blue - hover states */
+  --accent-color: #f72585; /* Pink/purple accent - for highlights, errors */
+  --light-color: #f8f9fa; /* Light background */
+  --dark-color: #240046; /* Deep purple-dark for header/footer/text */
+  --text-color: #333; /* Main text */
+  --border-color: #dee2e6; /* Soft borders */
+  --success-color: #06d6a0; /* Green for success messages */
+  --error-color: #ef476f; /* Red/pink for errors */
+  --warning-color: #ffd166; /* Yellow for warnings */
+}
+
+/* ========================================================================================== */
+/*                               GENERAL CSS STYLING                                      */
+/* ========================================================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background: var(--light-color);
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+.site-header {
+  background: var(--dark-color);
+  color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.site-header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.site-header h1 a {
+  color: white;
+  text-decoration: none;
+  font-size: 2.2rem;
+  font-weight: bold;
+}
+
+.main-nav a {
+  color: white;
+  text-decoration: none;
+  margin-left: 25px;
+  font-weight: 500;
+  transition: opacity 0.3s;
+}
+
+.main-nav a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+main {
+  min-height: 70vh;
+  padding: 60px 0;
+  text-align: center;
+}
+
+.site-footer {
+  background: var(--dark-color);
+  color: white;
+  text-align: center;
+  padding: 30px 0;
+  margin-top: auto;
+  font-size: 0.9rem;
+}
+
+.alert {
+  padding: 15px;
+  margin: 20px auto;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.alert-info {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #7dd3fc;
+}
+.alert-error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid var(--error-color);
+}
+.alert-success {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid var(--success-color);
+}
+
+/* ========================================================================================== */
+/*                               LOGIN PAGE STYLING                                       */
+/* ========================================================================================== */
+.login-container {
+  max-width: 420px;
+  margin: 40px auto;
+  padding: 40px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--dark-color);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border 0.3s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+.login-button {
+  width: 100%;
+  padding: 14px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-button:hover {
+  background: var(--secondary-color);
+}
+
+.register-link {
+  margin-top: 25px;
+  font-size: 0.95rem;
+}
+
+.register-link a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}
+
+/* ========================================================================================== */
+/*                               MOBILE RESPONSIVENESS                                    */
+/* ========================================================================================== */
+@media (max-width: 768px) {
+  .site-header .container {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px 0;
+  }
+
+  .site-header h1 a {
+    margin-bottom: 15px;
+  }
+
+  .main-nav {
+    margin-top: 10px;
+  }
+
+  .main-nav a {
+    display: block;
+    margin: 12px 0;
+    font-size: 1.1rem;
+  }
+
+  main {
+    padding: 40px 20px;
+  }
+
+  .login-container {
+    margin: 20px auto;
+    padding: 30px 20px;
+  }
+}

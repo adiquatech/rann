@@ -1,26 +1,97 @@
-require ('dotenv').config();
+/* ******************************************
+ * RANN - Anonymous Messaging App
+ * server.js - Main application file
+ *******************************************/
+
 const express = require('express');
-const { initDb } = require('./db/connect');
-const contactsRouter = require('./routes/contacts');
-const templeRouter = require('./routes/temples');
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger_output.json');
-
+const expressLayouts = require('express-ejs-layouts');
+// const env = require('dotenv').config();
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(express.static('styles'));
+const session = require('express-session');
+const flash = require('connect-flash');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
-// Home route
-app.use(session({
-    secret: process.env.SESSION_SECRET || 'rann-secret-key-quadri-2025',
+const { initDb } = require('./data/database');
+
+const baseController = require('./controllers/baseController');
+// We'll create other controllers later
+
+/* ***********************
+ * Middleware
+ ************************/
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || 'rann-super-secret',
     resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false}
-}));
+    saveUninitialized: true,
+    cookie: { secure: false }, // Change to true in production with HTTPS
+  })
+);
 
-// View engine setup
+app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.messages = req.flash(); // Make flash messages available in all views
+  next();
+});
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+/* ***********************
+ * View Engine and Templates
+ ************************/
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.use(expressLayouts);
+app.set('layout', './layouts/main'); // Main layout file
+
+app.use(express.static('public')); // CSS, JS, images
+
+/* ***********************
+ * Routes
+ ************************/
+app.get('/', baseController.buildHome); // Temporary home route
+
+app.use('/auth', require('./routes/auth'));
+
+// We'll add these later
+// app.use("/auth", require("./routes/auth"));
+// app.use("/messages", require("./routes/messages"));
+
+/* ***********************
+ * 404 and Error Handler
+ ************************/
+app.use((req, res, next) => {
+  next({ status: 404, message: 'Sorry, page not found.' });
+});
+
+app.use((err, req, res) => {
+  let title = err.status === 404 ? '404 - Page Not Found' : 'Server Error';
+  console.error(`Error: ${err.message}`);
+
+  res.status(err.status || 500);
+  res.render('errors/error', {
+    title,
+    message: err.message,
+    messages: res.locals.messages,
+  });
+});
+
+/* ***********************
+ * Start Server after DB Connection
+ ************************/
+initDb((err) => {
+  if (err) {
+    console.error('MongoDB connection failed:', err);
+    process.exit(1);
+  }
+
+  const port = process.env.PORT || 3000;
+  app.listen(port, () => {
+    console.log(`RANN server running on http://localhost:${port} 🚀`);
+    console.log('MongoDB connected successfully!');
+  });
+});
