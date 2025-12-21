@@ -109,6 +109,45 @@ main {
   color: #065f46;
   border: 1px solid var(--success-color);
 }
+/*=========================================================================================== */
+/*                               HOME PAGE STYLING                                        */
+*/
+/* ========================================================================================== */
+.home-content {
+  max-width: 800px;
+  margin: 60px auto;
+  text-align: center;
+}
+
+.home-content h1 {
+  font-size: 3.5rem;
+  color: var(--dark-color);
+  margin-bottom: 20px;
+}
+
+.home-buttons a {
+  display: inline-block;
+  padding: 16px 32px;
+  margin: 15px;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+}
+.btn-primary {
+  background: var(--primary-color);
+  color: white;
+}
+
+.btn-success {
+  background: var(--success-color);
+  color: white;
+}
+
+.home-buttons a:hover {
+  opacity: 0.9;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
 
 /* ========================================================================================== */
 /*                               LOGIN PAGE STYLING                                       */
@@ -179,6 +218,229 @@ main {
 
 .register-link a:hover {
   text-decoration: underline;
+}
+
+.oauth-buttons {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.btn-google,
+.btn-facebook {
+  display: inline-block;
+  padding: 12px 20px;
+  margin: 10px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.btn-google {
+  background: #db4437;
+  color: white;
+}
+
+.btn-facebook {
+  background: #3b5998;
+  color: white;
+}
+.date-header {
+  text-align: center;
+  margin: 30px 0 20px;
+  padding: 8px;
+  background: var(--light-color);
+  color: #666;
+  font-size: 0.9rem;
+  border-radius: 20px;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.reply-form {
+  margin-top: 15px;
+}
+
+.reply-form textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-family: inherit;
+}
+
+.reply-form button {
+  margin-top: 8px;
+  padding: 8px 16px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ========================================================================================== */
+/*                               PUBLIC SEND MESSAGE PAGE                                 */
+/* ========================================================================================== */
+.public-send-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 40px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+}
+
+.public-send-container h1 {
+  margin-bottom: 20px;
+  color: var(--dark-color);
+}
+
+.public-send-container p {
+  margin-bottom: 30px;
+  color: #555;
+}
+
+.public-send-container textarea {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 150px;
+}
+
+.send-anon-button {
+  margin-top: 20px;
+  padding: 14px 30px;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.send-anon-button:hover {
+  opacity: 0.9;
+}
+
+.back-link {
+  margin-top: 30px;
+}
+
+.back-link a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+/* ========================================================================================== */
+/*                               INBOX PAGE STYLING                                       */
+/* ========================================================================================== */
+.inbox-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.inbox-container h1 {
+  margin-bottom: 30px;
+  color: var(--dark-color);
+}
+
+.message-card {
+  background: white;
+  padding: 25px;
+  margin: 20px 0;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  border-left: 6px solid var(--primary-color);
+  text-align: left;
+}
+
+.message-card p {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  color: var(--text-color);
+}
+
+.message-card small {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.public-link {
+  margin-top: 40px;
+  padding: 20px;
+  background: #e0f2fe;
+  border-radius: 8px;
+  font-weight: 500;
+}
+.message-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  margin: 20px 0;
+}
+
+.message-link:hover .message-card {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+  transition: all 0.3s;
+}
+/* ========================================================================================== */
+/*........................................... Threads Page ...........................................*/
+/* ========================================================================================== */
+.thread-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.original {
+  border-left: 6px solid var(--primary-color);
+}
+
+.reply {
+  border-left: 6px solid var(--secondary-color);
+  margin-left: 40px;
+  background: #f0f8ff;
+}
+
+.reply-form {
+  margin-top: 40px;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+}
+
+/* ========================================================================================== */
+/*                               PROFILE PAGE STYLING                                     */
+/* ========================================================================================== */
+.profile-card {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  max-width: 600px;
+  margin: 40px auto;
+  text-align: left;
+}
+
+.profile-card p {
+  margin: 15px 0;
+  font-size: 1.1rem;
+}
+
+.profile-card code {
+  background: #e9ecef;
+  padding: 5px 10px;
+  border-radius: 4px;
 }
 
 /* ========================================================================================== */

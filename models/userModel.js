@@ -18,6 +18,12 @@ const User = {
     return { id: result.insertedId, ...newUser };
   },
 
+  // Find user by username
+  async findByUsername(username) {
+    const db = getDb();
+    return await db.collection('users').findOne({ username });
+  },
+
   // Find user by email
   async findByEmail(email) {
     const db = getDb();

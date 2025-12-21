@@ -1,11 +1,17 @@
-// controllers/baseController.js
-
-// Temporary home page builder
 const buildHome = (req, res) => {
-  res.render('home', {
-    title: 'RANN - Send Anonymous Messages',
-    messages: res.locals.messages || [],
-  });
+  if (req.session.loggedIn) {
+    res.render('home', {
+      title: `Welcome back, ${req.session.user.username}!`,
+      loggedIn: true,
+    });
+  } else {
+    res.render('home', {
+      title: 'RANN - Anonymous Messages',
+      loggedIn: false,
+    });
+  }
 };
 
-module.exports = { buildHome };
+module.exports = {
+  buildHome,
+};

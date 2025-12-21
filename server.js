@@ -14,6 +14,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
 const { initDb } = require('./data/database');
+// const passport = require('./config/passport');
 
 const baseController = require('./controllers/baseController');
 // We'll create other controllers later
@@ -34,12 +35,24 @@ app.use(flash());
 
 app.use((req, res, next) => {
   res.locals.messages = req.flash(); // Make flash messages available in all views
+
+  // Make session user available in all views
+  if (req.session && req.session.loggedIn) {
+    res.locals.user = req.session.user;
+    res.locals.loggedIn = true;
+  } else {
+    res.locals.user = null;
+    res.locals.loggedIn = false;
+  }
   next();
 });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 /* ***********************
  * View Engine and Templates
@@ -56,6 +69,8 @@ app.use(express.static('public')); // CSS, JS, images
 app.get('/', baseController.buildHome); // Temporary home route
 
 app.use('/auth', require('./routes/auth'));
+app.use('/messages', require('./routes/messages'));
+app.use(require('./routes/publicMessage'));
 
 // We'll add these later
 // app.use("/auth", require("./routes/auth"));

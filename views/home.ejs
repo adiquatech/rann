@@ -1,9 +1,19 @@
-<h1>Welcome to RANN</h1>
-<p>Send and receive anonymous messages securely.</p>
-
-<div style="margin: 20px 0;">
-  <a href="/auth/login" style="margin-right: 20px; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px;">Login</a>
-  <a href="/auth/register" style="padding: 10px 20px; background: #28a745; color: white; text-decoration: none; border-radius: 5px;">Register</a>
+<div class="home-content">
+  <% if (loggedIn) { %>
+    <h1>Welcome back, <%= user.username %>!</h1>
+    <p>Send and receive anonymous messages.</p>
+    <div class="home-buttons">
+      <a href="/messages/send" class="btn-primary">Send Message</a>
+      <a href="/messages/inbox" class="btn-primary">View Inbox</a>
+      <a href="/messages/outbox" class="btn-primary">View Outbox</a>
+      <a href="/messages/user/profile" class="btn-primary">My Profile</a>
+    </div>
+  <% } else { %>
+    <h1>RANN</h1>
+    <p>Send anonymous messages. No names. No judgment.</p>
+    <div class="home-buttons">
+      <a href="/auth/login" class="btn-primary">Login</a>
+      <a href="/auth/register" class="btn-success">Register</a>
+    </div>
+  <% } %>
 </div>
-
-<p>Build something real. No names. No judgment. Just truth.</p>

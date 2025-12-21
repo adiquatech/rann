@@ -1,0 +1,43 @@
+<% if (messages.length > 0) { %>
+  <% let currentDate = null; %>
+
+  <% messages.forEach(msg => { %>
+    <% const msgDate = new Date(msg.createdAt); %>
+    <% const msgDateStr = msgDate.toDateString(); %>
+
+    <% if (currentDate !== msgDateStr) { %>
+      <% currentDate = msgDateStr; %>
+      <div class="date-header">
+        <% 
+          const today = new Date();
+          const yesterday = new Date(today);
+          yesterday.setDate(yesterday.getDate() - 1);
+
+          if (msgDate.toDateString() === today.toDateString()) { %>
+            Today
+          <% } else if (msgDate.toDateString() === yesterday.toDateString()) { %>
+            Yesterday
+          <% } else { %>
+            <%= msgDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %>
+          <% } %>
+      </div>
+    <% } %>
+
+    <div class="message-card">
+      <p><%= msg.text %></p>
+      <small><%= msgDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) %></small>
+
+      <% if (msg.fromUserId) { %>
+        <div class="reply-form">
+          <form action="/messages/reply" method="post">
+            <input type="hidden" name="toUserId" value="<%= msg.fromUserId %>">
+            <textarea name="text" placeholder="Reply anonymously..." rows="2" required></textarea>
+            <button type="submit">Reply</button>
+          </form>
+        </div>
+      <% } %>
+    </div>
+  <% }) %>
+<% } else { %>
+  <p>No messages yet.</p>
+<% } %>

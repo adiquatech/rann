@@ -27,7 +27,10 @@ const registerUser = async (req, res) => {
     await User.create({ username, email, password });
 
     req.flash('success', 'Account created! Please log in.');
-    res.redirect('/auth/login');
+
+    const redirectTo = req.session.redirectTo || '/messages/inbox';
+    delete req.session.redirectTo;
+    return res.redirect(redirectTo); // ← Fixed: only one redirect, with return
   } catch (err) {
     console.error(err);
     req.flash('error', 'Registration failed. Try again.');
@@ -39,9 +42,17 @@ const loginUser = async (req, res) => {
   const { account_email, account_password } = req.body;
 
   try {
-    const user = await User.findByEmail(account_email);
+    let user = null; // ← Fixed: typo "letユーザー" → "let user"
+
+    // Try email first
+    user = await User.findByEmail(account_email);
     if (!user) {
-      req.flash('error', 'Invalid email or password.');
+      // Then try username
+      user = await User.findByUsername(account_email);
+    }
+
+    if (!user) {
+      req.flash('error', 'Invalid username/email or password.');
       return res.redirect('/auth/login');
     }
 
@@ -50,11 +61,11 @@ const loginUser = async (req, res) => {
       user.password
     );
     if (!validPassword) {
-      req.flash('error', 'Invalid email or password.');
+      req.flash('error', 'Invalid username/email or password.');
       return res.redirect('/auth/login');
     }
 
-    // Save user in session
+    // Save to session
     req.session.user = {
       id: user._id,
       username: user.username,
@@ -63,7 +74,10 @@ const loginUser = async (req, res) => {
     req.session.loggedIn = true;
 
     req.flash('success', `Welcome back, ${user.username}!`);
-    res.redirect('/messages/inbox'); // or dashboard/home
+
+    const redirectTo = req.session.redirectTo || '/messages/inbox';
+    delete req.session.redirectTo;
+    return res.redirect(redirectTo); // ← Good: only one redirect
   } catch (err) {
     console.error(err);
     req.flash('error', 'Login failed. Try again.');

@@ -1,0 +1,12 @@
+<h1>Send Anonymous Message to <%= receiver.username %></h1>
+
+<div class="public-send-container">
+  <p>Anything you write will be completely anonymous.</p>
+
+  <form action="/to/<%= receiver.username %>" method="post">
+    <textarea name="text" rows="6" placeholder="Write your message here..." required></textarea>
+    <button type="submit" class="send-anon-button">Send Anonymously</button>
+  </form>
+
+  <p class="back-link"><a href="/">← Back to home</a></p>
+</div>
