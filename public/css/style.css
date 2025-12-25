@@ -109,44 +109,123 @@ main {
   color: #065f46;
   border: 1px solid var(--success-color);
 }
-/*=========================================================================================== */
+
+/* ========================================================================================== */
 /*                               HOME PAGE STYLING                                        */
-*/
 /* ========================================================================================== */
 .home-content {
-  max-width: 800px;
-  margin: 60px auto;
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 40px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
   text-align: center;
 }
-
 .home-content h1 {
   font-size: 3.5rem;
   color: var(--dark-color);
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  font-weight: 700;
 }
-
+.home-content p {
+  font-size: 1.3rem;
+  color: #555;
+  margin-bottom: 40px;
+}
+.home-buttons {
+  margin-top: 30px;
+}
 .home-buttons a {
   display: inline-block;
-  padding: 16px 32px;
-  margin: 15px;
+  padding: 18px 36px;
+  margin: 12px;
   font-size: 1.2rem;
-  border-radius: 8px;
+  font-weight: 600;
+  border-radius: 12px;
   text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+.home-buttons a:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 .btn-primary {
   background: var(--primary-color);
   color: white;
 }
-
+.btn-primary:hover {
+  background: var(--secondary-color);
+}
 .btn-success {
   background: var(--success-color);
   color: white;
 }
+.btn-success:hover {
+  background: #05b589;
+}
+.public-link-section {
+  margin: 50px 0;
+}
+.link-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+.link-box code {
+  background: #e9ecef;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  color: var(--dark-color);
+  word-break: break-all;
+  max-width: 70%;
+}
+.copy-btn {
+  padding: 12px 24px;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+.copy-btn:hover {
+  background: #d81b60;
+}
+.share-hint {
+  font-size: 1rem;
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto;
+}
 
-.home-buttons a:hover {
-  opacity: 0.9;
-  transform: translateY(-3px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+/* Mobile */
+@media (max-width: 768px) {
+  .home-content {
+    margin: 30px 15px;
+    padding: 30px 20px;
+  }
+  .home-content h1 {
+    font-size: 2.8rem;
+  }
+  .home-buttons a {
+    display: block;
+    width: 80%;
+    margin: 15px auto;
+  }
+  .link-box {
+    flex-direction: column;
+  }
+  .link-box code {
+    max-width: 90%;
+    text-align: center;
+  }
 }
 
 /* ========================================================================================== */
@@ -278,7 +357,27 @@ main {
   border-radius: 6px;
   cursor: pointer;
 }
+.password-group {
+  position: relative;
+}
 
+.password-wrapper {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.2rem;
+  user-select: none;
+}
+
+.toggle-password:hover {
+  opacity: 0.7;
+}
 /* ========================================================================================== */
 /*                               PUBLIC SEND MESSAGE PAGE                                 */
 /* ========================================================================================== */

@@ -4,7 +4,7 @@
   <div class="profile-card">
     <p><strong>Username:</strong> <%= user.username %></p>
     <p><strong>Email:</strong> <%= user.email %></p>
-    <p><strong>Public Link:</strong> <code>http://localhost:3000/to/<%= user.username %></code></p>
+    <p><strong>Public Link:</strong> <code><%= publicLink %></code></p>
     <p>Share this link to receive anonymous messages.</p>
 
     <a href="/messages/inbox" class="btn-primary">View Inbox</a>

@@ -18,8 +18,16 @@ const registerUser = async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
-    const existingUser = await User.findByEmail(email);
-    if (existingUser) {
+    // Check for duplicate username
+    const existingUsername = await User.findByUsername(username);
+    if (existingUsername) {
+      req.flash('error', 'Username already taken.');
+      return res.redirect('/auth/register');
+    }
+
+    // Check for duplicate email
+    const existingEmail = await User.findByEmail(email);
+    if (existingEmail) {
       req.flash('error', 'Email already registered.');
       return res.redirect('/auth/register');
     }
@@ -30,7 +38,7 @@ const registerUser = async (req, res) => {
 
     const redirectTo = req.session.redirectTo || '/messages/inbox';
     delete req.session.redirectTo;
-    return res.redirect(redirectTo); // ← Fixed: only one redirect, with return
+    return res.redirect(redirectTo);
   } catch (err) {
     console.error(err);
     req.flash('error', 'Registration failed. Try again.');

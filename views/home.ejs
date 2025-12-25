@@ -1,13 +1,32 @@
-<div class="home-content">
-  <% if (loggedIn) { %>
-    <h1>Welcome back, <%= user.username %>!</h1>
-    <p>Send and receive anonymous messages.</p>
-    <div class="home-buttons">
-      <a href="/messages/send" class="btn-primary">Send Message</a>
-      <a href="/messages/inbox" class="btn-primary">View Inbox</a>
-      <a href="/messages/outbox" class="btn-primary">View Outbox</a>
-      <a href="/messages/user/profile" class="btn-primary">My Profile</a>
+<% if (loggedIn) { %>
+  <h1>Welcome back, <%= user.username %>!</h1>
+
+  <div class="profile-pic-wrapper">
+    <div class="profile-pic-circle">
+      <img src="/images/placeholder.jpg" alt="Profile picture" class="profile-pic">
+      <div class="edit-icon">✏️</div>
     </div>
+    <p class="username-display"><%= user.username %></p>
+  </div>
+
+  <p>RANN lets you send and receive messages completely anonymously.</p>
+  <p>No names. No judgment. Just truth.</p>
+
+  <div class="public-link-section">
+    <p><strong>Your secret link:</strong></p>
+    <div class="link-box">
+      <code id="publicLink"><%= publicLink %></code>
+      <button onclick="copyLink()" class="copy-btn">Copy</button>
+    </div>
+    <p class="share-hint">Share this link with anyone — they can send you messages without knowing who you are.</p>
+  </div>
+
+  <div class="home-buttons">
+    <a href="/messages/inbox" class="btn-primary">View Inbox</a>
+    <a href="/messages/outbox" class="btn-primary">View Outbox</a>
+    <a href="/messages/user/profile" class="btn-primary">My Profile</a>
+  </div>
+
   <% } else { %>
     <h1>RANN</h1>
     <p>Send anonymous messages. No names. No judgment.</p>

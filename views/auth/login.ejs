@@ -2,20 +2,30 @@
 <div class="login-container">
     <form action="/auth/login" method="post" class="login-form">
         <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="text" id="email" name="account_email" required placeholder="Enter your email" autocomplete="email">
+            <label for="login-input">Username or Email:</label>
+            <input 
+                type="text" 
+                id="login-input" 
+                name="account_email" 
+                required 
+                placeholder="Enter username or email" 
+                autocomplete="username">
         </div>
-        <div class="form-group">
+        <div class="form-group password-group">
             <label for="password">Password:</label>
-            <input type="password" id="password" name="account_password" required placeholder="Enter your password" autocomplete="current-password">
+            <div class="password-wrapper">
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="account_password" 
+                    required 
+                    placeholder="Enter your password" 
+                    autocomplete="current-password">
+                <span class="toggle-password" onclick="togglePassword(this)">👁️</span>
+            </div>
         </div>
         <button type="submit" class="login-button">Login</button>
     </form>
-    <p class="register-link">No account? <a href="/auth/register">Sign-up</a></p>
+    <p class="register-link">No account? <a href="/auth/register">Register</a></p>
+    <p class="register-link">Forget Password? <a href="/auth/forgot-password">Reset it here</a></p>
 </div>
-
-<!-- <div class="oauth-buttons">
-  <p>Or continue with:</p>
-  <a href="/auth/google" class="btn-google">Google</a>
-  <a href="/auth/facebook" class="btn-facebook">Facebook</a>
-</div> -->
