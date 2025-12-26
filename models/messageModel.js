@@ -12,10 +12,11 @@ const Message = {
       toUserId: new ObjectId(messageData.toUserId),
       fromUserId: messageData.fromUserId
         ? new ObjectId(messageData.fromUserId)
-        : null, // ← FIX HERE
-      text: messageData.text,
+        : null,
+      text: messageData.text.trim(),
       createdAt: new Date(),
       read: false,
+      replyTo: messageData.replyTo ? new ObjectId(messageData.replyTo) : null, // ← NEW
     };
     const result = await db.collection(collectionName).insertOne(newMessage);
     return { id: result.insertedId, ...newMessage };

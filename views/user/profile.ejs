@@ -2,6 +2,13 @@
   <h1>My Profile</h1>
 
   <div class="profile-card">
+    <div class="profile-pic-wrapper">
+    <div class="profile-pic-circle">
+      <img src="/images/placeholder.jpg" alt="Profile picture" class="profile-pic">
+      <div class="edit-icon">✏️</div>
+    </div>
+  </div>
+
     <p><strong>Username:</strong> <%= user.username %></p>
     <p><strong>Email:</strong> <%= user.email %></p>
     <p><strong>Public Link:</strong> <code><%= publicLink %></code></p>

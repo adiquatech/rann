@@ -1,17 +1,25 @@
 <div class="inbox-container">
   <h1>Your Sent Messages (Outbox)</h1>
 
-  <% if (messages.length === 0) { %>
+  <% if (conversations.length === 0) { %>
     <p>You haven't sent any messages yet.</p>
   <% } else { %>
-    <% messages.forEach(msg => { %>
-      <div class="message-card">
-        <p><strong>To:</strong> <%= msg.receiverUsername %></p>
-        <p><%= msg.text %></p>
-        <small>Sent on <%= new Date(msg.createdAt).toLocaleDateString() %></small>
-      </div>
+    <% conversations.forEach(conv => { %>
+      <a href="/messages/thread/<%= conv.original._id %>" class="conversation-link">
+        <div class="conversation-card">
+          <div class="sender-info">
+            <strong>To: <%= conv.receiverUsername %></strong>
+            <small><%= new Date(conv.latest.createdAt).toLocaleString() %></small>
+          </div>
+          <p class="last-message"><%= conv.latest.text %></p>
+        </div>
+      </a>
     <% }) %>
   <% } %>
 
-  <p><a href="/messages/send">← Send another message</a></p>
+  <div class="public-link">
+    <p>Your public link:</p>
+    <code><%= publicLink %></code>
+    <button onclick="copyLink()" class="copy-btn">Copy</button>
+  </div>
 </div>

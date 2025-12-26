@@ -1,7 +1,6 @@
 <div class="thread-container">
-  <h1>Message Thread</h1>
-
-  <a href="/messages/inbox">← Back to Inbox</a>
+  <h1>Conversation</h1>
+  <a href="/messages/inbox">← Back</a>
 
   <!-- Original Message -->
   <div class="message-card original">
@@ -12,7 +11,6 @@
 
   <!-- Replies -->
   <% if (replies.length > 0) { %>
-    <h3>Replies</h3>
     <% replies.forEach(reply => { %>
       <div class="message-card reply">
         <p><strong>From:</strong> <%= reply.senderUsername %></p>
@@ -25,10 +23,10 @@
   <!-- Reply Form -->
   <% if (originalMessage.fromUserId) { %>
     <div class="reply-form">
-      <h3>Send Reply</h3>
       <form action="/messages/reply" method="post">
         <input type="hidden" name="toUserId" value="<%= originalMessage.fromUserId %>">
-        <textarea name="text" rows="4" placeholder="Write your reply..." required></textarea>
+        <input type="hidden" name="replyTo" value="<%= originalMessage._id %>">
+        <textarea name="text" placeholder="Reply..." required></textarea>
         <button type="submit">Send Reply</button>
       </form>
     </div>

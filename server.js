@@ -7,15 +7,11 @@ const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 // const env = require('dotenv').config();
 const app = express();
-
 const session = require('express-session');
 const flash = require('connect-flash');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-
 const { initDb } = require('./data/database');
-// const passport = require('./config/passport');
-
 const baseController = require('./controllers/baseController');
 // We'll create other controllers later
 

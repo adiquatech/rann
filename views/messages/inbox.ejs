@@ -1,43 +1,28 @@
-<% if (messages.length > 0) { %>
-  <% let currentDate = null; %>
+<div class="inbox-container">
+  <h1>Your Inbox</h1>
 
-  <% messages.forEach(msg => { %>
-    <% const msgDate = new Date(msg.createdAt); %>
-    <% const msgDateStr = msgDate.toDateString(); %>
-
-    <% if (currentDate !== msgDateStr) { %>
-      <% currentDate = msgDateStr; %>
-      <div class="date-header">
-        <% 
-          const today = new Date();
-          const yesterday = new Date(today);
-          yesterday.setDate(yesterday.getDate() - 1);
-
-          if (msgDate.toDateString() === today.toDateString()) { %>
-            Today
-          <% } else if (msgDate.toDateString() === yesterday.toDateString()) { %>
-            Yesterday
-          <% } else { %>
-            <%= msgDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %>
+  <% if (conversations.length === 0) { %>
+    <p>No messages yet. Share your link!</p>
+  <% } else { %>
+    <% conversations.forEach(conv => { %>
+      <a href="/messages/thread/<%= conv.original._id %>" class="conversation-link">
+        <div class="conversation-card">
+          <div class="sender-info">
+            <strong><%= conv.senderUsername || 'Anonymous' %></strong>
+            <small><%= new Date(conv.latest.createdAt).toLocaleString() %></small>
+          </div>
+          <p class="last-message"><%= conv.latest.text %></p>
+          <% if (conv.unreadCount > 0) { %>
+            <span class="unread-badge"><%= conv.unreadCount %></span>
           <% } %>
-      </div>
-    <% } %>
-
-    <div class="message-card">
-      <p><%= msg.text %></p>
-      <small><%= msgDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) %></small>
-
-      <% if (msg.fromUserId) { %>
-        <div class="reply-form">
-          <form action="/messages/reply" method="post">
-            <input type="hidden" name="toUserId" value="<%= msg.fromUserId %>">
-            <textarea name="text" placeholder="Reply anonymously..." rows="2" required></textarea>
-            <button type="submit">Reply</button>
-          </form>
         </div>
-      <% } %>
-    </div>
-  <% }) %>
-<% } else { %>
-  <p>No messages yet.</p>
-<% } %>
+      </a>
+    <% }) %>
+  <% } %>
+
+  <div class="public-link">
+    <p>Your public link:</p>
+    <code><%= publicLink %></code>
+    <button onclick="copyLink()" class="copy-btn">Copy</button>
+  </div>
+</div>
