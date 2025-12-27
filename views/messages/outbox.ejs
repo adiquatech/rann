@@ -1,17 +1,17 @@
 <div class="inbox-container">
   <h1>Your Sent Messages (Outbox)</h1>
-
- <% if (conversations.length === 0) { %>
+  
+<% if (messages.length === 0) { %>
   <p>You haven't sent any messages yet.</p>
 <% } else { %>
-  <% conversations.forEach(conv => { %>
-    <a href="/messages/thread/<%= conv.original._id %>" class="message-link">
+  <% messages.forEach(msg => { %>
+    <a href="/messages/thread/<%= msg._id %>" class="message-link">
       <div class="message-card">
         <div class="sender-info">
-          <strong>To: <%= conv.receiverUsername %></strong>
-          <small><%= new Date(conv.latest.createdAt).toLocaleString() %></small>
+          <strong>To: <%= msg.receiverUsername %></strong>
+          <small><%= new Date(msg.createdAt).toLocaleString() %></small>
         </div>
-        <p><%= conv.latest.text %></p>
+        <p><%= msg.text %></p>
       </div>
     </a>
   <% }) %>

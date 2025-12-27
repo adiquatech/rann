@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const Message = require('../models/messageModel');
 const User = require('../models/userModel');
 const { ObjectId } = require('mongodb');
@@ -9,7 +10,7 @@ const getInbox = async (req, res) => {
   messages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   // Force sender to be "Anonymous" for privacy
-  messages.forEach(msg => {
+  messages.forEach((msg) => {
     msg.senderUsername = 'Anonymous';
   });
 
@@ -17,8 +18,8 @@ const getInbox = async (req, res) => {
 
   res.render('messages/inbox', {
     title: 'Your Inbox',
-    messages,  // ← just pass messages, no conversations
-    publicLink
+    messages, // ← just pass messages, no conversations
+    publicLink,
   });
 };
 
@@ -27,51 +28,52 @@ const getOutbox = async (req, res) => {
 
   const sentMessages = await Message.getBySenderId(senderId);
 
-  let conversations = [];
-  const map = new Map();
+  // Only keep messages that are NOT replies (no replyTo)
+  const standaloneMessages = sentMessages.filter((msg) => !msg.replyTo);
 
-  for (const msg of sentMessages) {
-    const receiverId = msg.toUserId.toString();
-
-    // Skip if this is a reply (replyTo exists)
-    if (msg.replyTo) continue;
-
-    if (!map.has(receiverId) ) {
-      const receiver = await User.findById(msg.toUserId);
-      map.set(receiverId, {
-        receiverUsername: receiver ? receiver.username : 'Deleted User',
-        original: msg,
-        latest: msg,
-        messageCount: 1
-      });
-    }
-
-    const conv = map.get(receiverId);
-    conv.messageCount++;
-
-    if (new Date(msg.createdAt) > new Date(conv.latest.createdAt)) {
-      conv.latest = msg;
-    }
-  }
-
-  conversations = Array.from(map.values()).sort((a, b) => 
-    new Date(b.latest.createdAt) - new Date(a.latest.createdAt)
+  // Sort newest first
+  standaloneMessages.sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   );
+
+  // Load receiver usernames
+  for (let msg of standaloneMessages) {
+    const receiver = await User.findById(msg.toUserId);
+    msg.receiverUsername = receiver ? receiver.username : 'Deleted User';
+  }
 
   const publicLink = `${req.protocol}://${req.get('host')}/to/${req.session.user.username}`;
 
   res.render('messages/outbox', {
     title: 'Your Sent Messages',
-    conversations,
-    publicLink
+    messages: standaloneMessages, // only original messages
+    publicLink,
   });
 };
 
-const getSend = (req, res) => {
+const getSend = async (req, res) => {
   const publicLink = `${req.protocol}://${req.get('host')}/to/${req.session.user.username}`;
+
+  // Only get people YOU sent messages to
+  const sentMessages = await Message.getBySenderId(req.session.user.id);
+
+  // Collect unique receiver IDs
+  const receiverIds = new Set();
+  sentMessages.forEach((msg) => {
+    if (msg.toUserId) receiverIds.add(msg.toUserId.toString());
+  });
+
+  // Fetch users
+  const contacts = [];
+  for (const id of receiverIds) {
+    const user = await User.findById(id);
+    if (user) contacts.push(user);
+  }
+
   res.render('messages/send', {
     title: 'Send Anonymous Message',
-    publicLink: publicLink,
+    publicLink,
+    contacts,
   });
 };
 
@@ -88,7 +90,9 @@ const getThread = async (req, res) => {
     }
 
     const userId = req.session.user.id;
-    const isSender = originalMessage.fromUserId && originalMessage.fromUserId.toString() === userId;
+    const isSender =
+      originalMessage.fromUserId &&
+      originalMessage.fromUserId.toString() === userId;
     const isReceiver = originalMessage.toUserId.toString() === userId;
 
     if (!isSender && !isReceiver) {
@@ -99,12 +103,24 @@ const getThread = async (req, res) => {
     const replies = await Message.getReplies(messageId);
 
     // Load sender usernames
-    const sender = originalMessage.fromUserId ? await User.findById(originalMessage.fromUserId) : null;
-    originalMessage.senderUsername = isReceiver ? 'Anonymous' : sender ? sender.username : 'Anonymous';
+    const sender = originalMessage.fromUserId
+      ? await User.findById(originalMessage.fromUserId)
+      : null;
+    originalMessage.senderUsername = isReceiver
+      ? 'Anonymous'
+      : sender
+        ? sender.username
+        : 'Anonymous';
 
     for (let reply of replies) {
-      const replySender = reply.fromUserId ? await User.findById(reply.fromUserId) : null;
-      reply.senderUsername = isReceiver ? 'Anonymous' : replySender ? replySender.username : 'Anonymous';
+      const replySender = reply.fromUserId
+        ? await User.findById(reply.fromUserId)
+        : null;
+      reply.senderUsername = isReceiver
+        ? 'Anonymous'
+        : replySender
+          ? replySender.username
+          : 'Anonymous';
     }
 
     // Set header name
