@@ -1,24 +1,21 @@
 <div class="inbox-container">
   <h1>Your Inbox</h1>
 
-  <% if (conversations.length === 0) { %>
-    <p>No messages yet. Share your link!</p>
-  <% } else { %>
-    <% conversations.forEach(conv => { %>
-      <a href="/messages/thread/<%= conv.original._id %>" class="conversation-link">
-        <div class="conversation-card">
-          <div class="sender-info">
-            <strong><%= conv.senderUsername || 'Anonymous' %></strong>
-            <small><%= new Date(conv.latest.createdAt).toLocaleString() %></small>
-          </div>
-          <p class="last-message"><%= conv.latest.text %></p>
-          <% if (conv.unreadCount > 0) { %>
-            <span class="unread-badge"><%= conv.unreadCount %></span>
-          <% } %>
+  <% if (messages.length === 0) { %>
+  <p>No messages yet. Share your link!</p>
+<% } else { %>
+  <% messages.forEach(msg => { %>
+    <a href="/messages/thread/<%= msg._id %>" class="message-link">
+      <div class="message-card">
+        <div class="sender-info">
+          <strong>Anonymous</strong>
+          <small><%= new Date(msg.createdAt).toLocaleString() %></small>
         </div>
-      </a>
-    <% }) %>
-  <% } %>
+        <p><%= msg.text %></p>
+      </div>
+    </a>
+  <% }) %>
+<% } %>
 
   <div class="public-link">
     <p>Your public link:</p>

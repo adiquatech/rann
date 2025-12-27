@@ -543,31 +543,123 @@ main {
   font-size: 0.9rem;
   font-weight: bold;
 }
+
 /* ========================================================================================== */
-/*........................................... Threads Page ...........................................*/
+/*                               THREAD PAGE - CHAT STYLE                                 */
 /* ========================================================================================== */
 .thread-container {
-  max-width: 800px;
-  margin: 40px auto;
+  max-width: 900px;
+  margin: 20px auto;
   padding: 20px;
 }
 
-.original {
-  border-left: 6px solid var(--primary-color);
+.back-link {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
 }
 
-.reply {
-  border-left: 6px solid var(--secondary-color);
-  margin-left: 40px;
-  background: #f0f8ff;
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.chat-thread {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+  overflow: hidden;
+}
+
+.chat-header {
+  background: var(--primary-color);
+  color: white;
+  padding: 25px;
+  text-align: center;
+}
+
+.chat-header h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.chat-messages {
+  padding: 20px;
+  min-height: 400px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.chat-message {
+  margin: 15px 0;
+  display: flex;
+}
+
+.chat-message.received {
+  justify-content: flex-start;
+}
+
+.chat-message.sent {
+  justify-content: flex-end;
+}
+
+.message-bubble {
+  max-width: 70%;
+  padding: 15px 20px;
+  border-radius: 20px;
+  position: relative;
+}
+
+.message-bubble.received {
+  background: #f0f0f0;
+  border-bottom-left-radius: 5px;
+}
+
+.message-bubble.sent {
+  background: var(--primary-color);
+  color: white;
+  border-bottom-right-radius: 5px;
+}
+
+.message-time {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  margin-top: 8px;
+  text-align: right;
 }
 
 .reply-form {
-  margin-top: 40px;
   padding: 20px;
-  background: white;
+  background: #f8f9fa;
+  border-top: 1px solid #eee;
+}
+
+.reply-form textarea {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid var(--border-color);
   border-radius: 12px;
-  box-shadow: var(--card-shadow);
+  font-family: inherit;
+  font-size: 1.1rem;
+  resize: vertical;
+  min-height: 100px;
+  margin-bottom: 15px;
+}
+
+.reply-form button {
+  padding: 12px 30px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.reply-form button:hover {
+  background: var(--secondary-color);
 }
 
 /* ========================================================================================== */

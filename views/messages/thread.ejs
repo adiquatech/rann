@@ -1,34 +1,37 @@
 <div class="thread-container">
-  <h1>Conversation</h1>
-  <a href="/messages/inbox">← Back</a>
+  <a href="/messages/inbox" class="back-link">← Back to Inbox</a>
 
-  <!-- Original Message -->
-  <div class="message-card original">
-    <p><strong>From:</strong> <%= originalMessage.senderUsername %></p>
-    <p><%= originalMessage.text %></p>
-    <small><%= new Date(originalMessage.createdAt).toLocaleString() %></small>
-  </div>
-
-  <!-- Replies -->
-  <% if (replies.length > 0) { %>
-    <% replies.forEach(reply => { %>
-      <div class="message-card reply">
-        <p><strong>From:</strong> <%= reply.senderUsername %></p>
-        <p><%= reply.text %></p>
-        <small><%= new Date(reply.createdAt).toLocaleString() %></small>
-      </div>
-    <% }) %>
-  <% } %>
-
-  <!-- Reply Form -->
-  <% if (originalMessage.fromUserId) { %>
-    <div class="reply-form">
-      <form action="/messages/reply" method="post">
-        <input type="hidden" name="toUserId" value="<%= originalMessage.fromUserId %>">
-        <input type="hidden" name="replyTo" value="<%= originalMessage._id %>">
-        <textarea name="text" placeholder="Reply..." required></textarea>
-        <button type="submit">Send Reply</button>
-      </form>
+  <div class="chat-thread">
+    <!-- Chat Header -->
+    <div class="chat-header">
+      <h2><%= headerName %></h2>
     </div>
-  <% } %>
+
+    <!-- Messages -->
+    <div class="chat-messages">
+      <% const allMessages = [originalMessage, ...replies].sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt)); %>
+      <% allMessages.forEach((msg, index) => { %>
+        <div class="chat-message <%= msg.fromUserId?.toString() === user.id ? 'sent' : 'received' %>">
+          <div class="message-bubble">
+            <p><%= msg.text %></p>
+            <small class="message-time">
+              <%= new Date(msg.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %>
+            </small>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+
+    <!-- Reply Form -->
+    <% if (originalMessage.fromUserId) { %>
+      <div class="reply-form">
+        <form action="/messages/reply" method="post">
+          <input type="hidden" name="toUserId" value="<%= originalMessage.fromUserId %>">
+          <input type="hidden" name="replyTo" value="<%= originalMessage._id %>">
+          <textarea name="text" placeholder="Type your reply..." required></textarea>
+          <button type="submit">Send</button>
+        </form>
+      </div>
+    <% } %>
+  </div>
 </div>

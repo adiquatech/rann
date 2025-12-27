@@ -5,44 +5,20 @@ const { ObjectId } = require('mongodb');
 const getInbox = async (req, res) => {
   const messages = await Message.getByUserId(req.session.user.id);
 
-  // Group by sender
-  let conversations = [];
-  const map = new Map();
+  // Sort newest first
+  messages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-  for (const msg of messages) {
-    const senderId = msg.fromUserId ? msg.fromUserId.toString() : 'anonymous';
-    if (!map.has(senderId)) {
-      const sender = msg.fromUserId
-        ? await User.findById(msg.fromUserId)
-        : null;
-      map.set(senderId, {
-        senderUsername: sender ? sender.username : 'Anonymous',
-        messages: [],
-        original: msg,
-        latest: msg,
-        unreadCount: 0,
-      });
-    }
-
-    const conv = map.get(senderId);
-    conv.messages.push(msg);
-    if (new Date(msg.createdAt) > new Date(conv.latest.createdAt)) {
-      conv.latest = msg;
-    }
-    // unread logic later
-  }
-
-  // Sort by latest message
-  conversations = Array.from(map.values()).sort(
-    (a, b) => new Date(b.latest.createdAt) - new Date(a.latest.createdAt)
-  );
+  // Force sender to be "Anonymous" for privacy
+  messages.forEach(msg => {
+    msg.senderUsername = 'Anonymous';
+  });
 
   const publicLink = `${req.protocol}://${req.get('host')}/to/${req.session.user.username}`;
 
   res.render('messages/inbox', {
     title: 'Your Inbox',
-    conversations,
-    publicLink,
+    messages,  // ← just pass messages, no conversations
+    publicLink
   });
 };
 
@@ -57,8 +33,10 @@ const getOutbox = async (req, res) => {
   for (const msg of sentMessages) {
     const receiverId = msg.toUserId.toString();
 
-    // Only create conversation if this is the first message (no replyTo)
-    if (!msg.replyTo && !map.has(receiverId)) {
+    // Skip if this is a reply (replyTo exists)
+    if (msg.replyTo) continue;
+
+    if (!map.has(receiverId) ) {
       const receiver = await User.findById(msg.toUserId);
       map.set(receiverId, {
         receiverUsername: receiver ? receiver.username : 'Deleted User',
@@ -68,14 +46,11 @@ const getOutbox = async (req, res) => {
       });
     }
 
-    // Update latest for existing conversation
-    if (map.has(receiverId)) {
-      const conv = map.get(receiverId);
-      conv.messageCount++;
+    const conv = map.get(receiverId);
+    conv.messageCount++;
 
-      if (new Date(msg.createdAt) > new Date(conv.latest.createdAt)) {
-        conv.latest = msg;
-      }
+    if (new Date(msg.createdAt) > new Date(conv.latest.createdAt)) {
+      conv.latest = msg;
     }
   }
 
@@ -112,7 +87,6 @@ const getThread = async (req, res) => {
       return res.redirect('/messages/inbox');
     }
 
-    // Allow access if user is sender OR receiver
     const userId = req.session.user.id;
     const isSender = originalMessage.fromUserId && originalMessage.fromUserId.toString() === userId;
     const isReceiver = originalMessage.toUserId.toString() === userId;
@@ -126,11 +100,20 @@ const getThread = async (req, res) => {
 
     // Load sender usernames
     const sender = originalMessage.fromUserId ? await User.findById(originalMessage.fromUserId) : null;
-    originalMessage.senderUsername = sender ? sender.username : 'Anonymous';
+    originalMessage.senderUsername = isReceiver ? 'Anonymous' : sender ? sender.username : 'Anonymous';
 
     for (let reply of replies) {
       const replySender = reply.fromUserId ? await User.findById(reply.fromUserId) : null;
-      reply.senderUsername = replySender ? replySender.username : 'Anonymous';
+      reply.senderUsername = isReceiver ? 'Anonymous' : replySender ? replySender.username : 'Anonymous';
+    }
+
+    // Set header name
+    let headerName;
+    if (isReceiver) {
+      headerName = 'Anonymous';
+    } else {
+      const receiver = await User.findById(originalMessage.toUserId);
+      headerName = receiver ? receiver.username : 'Deleted User';
     }
 
     const publicLink = `${req.protocol}://${req.get('host')}/to/${req.session.user.username}`;
@@ -139,7 +122,8 @@ const getThread = async (req, res) => {
       title: 'Message Thread',
       originalMessage,
       replies,
-      publicLink
+      headerName,
+      publicLink,
     });
   } catch (err) {
     console.error(err);
