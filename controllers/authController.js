@@ -83,7 +83,7 @@ const loginUser = async (req, res) => {
 
     req.flash('success', `Welcome back, ${user.username}!`);
 
-    const redirectTo = req.session.redirectTo || '/messages/inbox';
+    const redirectTo = req.session.redirectTo || '/';
     delete req.session.redirectTo;
     return res.redirect(redirectTo); // ← Good: only one redirect
   } catch (err) {

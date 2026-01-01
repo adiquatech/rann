@@ -1,6 +1,7 @@
 <div class="thread-container">
-  <a href="/messages/inbox" class="back-link">← Back to Inbox</a>
-
+<a href="/messages/<%= backTo %>" class="back-link">
+  ← Back to <%= backTo.charAt(0).toUpperCase() + backTo.slice(1) %>
+</a>
   <div class="chat-thread">
     <!-- Chat Header -->
     <div class="chat-header">

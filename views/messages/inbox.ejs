@@ -5,7 +5,7 @@
   <p>No messages yet. Share your link!</p>
 <% } else { %>
   <% messages.forEach(msg => { %>
-    <a href="/messages/thread/<%= msg._id %>" class="message-link">
+    <a href="/messages/thread/<%= msg._id %>?back=inbox" class="message-link">
       <div class="message-card">
         <div class="sender-info">
           <strong>Anonymous</strong>
@@ -23,7 +23,7 @@
       <code id="publicLink"><%= publicLink %></code>
       <button onclick="copyLink()" class="copy-btn">Copy</button>
     </div>
-    <p class="share-hint">Share this link with anyone — they can send you messages without knowing who you are.</p>
+    <p class="share-hint">Share this link to receive anonmessages from anyone.</p>
   </div>
 
 </div>

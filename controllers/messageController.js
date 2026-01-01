@@ -26,6 +26,7 @@ const getInbox = async (req, res) => {
     title: 'Your Inbox',
     messages: standaloneMessages, // only original messages
     publicLink,
+    page: 'inbox',
   });
 };
 
@@ -54,6 +55,7 @@ const getOutbox = async (req, res) => {
     title: 'Your Sent Messages',
     messages: standaloneMessages, // only original messages
     publicLink,
+    page: 'outbox',
   });
 };
 
@@ -85,6 +87,7 @@ const getSend = async (req, res) => {
 
 const getThread = async (req, res) => {
   const messageId = req.params.messageId;
+  const backTo = req.query.back === 'outbox' ? 'outbox' : 'inbox';
   const ObjectId = require('mongodb').ObjectId;
 
   try {
@@ -146,6 +149,7 @@ const getThread = async (req, res) => {
       replies,
       headerName,
       publicLink,
+      backTo,
     });
   } catch (err) {
     console.error(err);
