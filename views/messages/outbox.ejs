@@ -17,9 +17,13 @@
   <% }) %>
 <% } %>
 
-  <div class="public-link">
-    <p>Your public link:</p>
-    <code><%= publicLink %></code>
-    <button onclick="copyLink()" class="copy-btn">Copy</button>
+  <div class="public-link-section">
+    <p><strong>Your secret link:</strong></p>
+    <div class="link-box">
+      <code id="publicLink"><%= publicLink %></code>
+      <button onclick="copyLink()" class="copy-btn">Copy</button>
+    </div>
+    <p class="share-hint">Share this link with anyone — they can send you messages without knowing who you are.</p>
   </div>
+
 </div>

@@ -2,15 +2,21 @@
 const Message = require('../models/messageModel');
 const User = require('../models/userModel');
 const { ObjectId } = require('mongodb');
+const { getDb } = require('../data/database');
 
 const getInbox = async (req, res) => {
   const messages = await Message.getByUserId(req.session.user.id);
 
-  // Sort newest first
-  messages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  // Filter out replies — only show original messages (no replyTo)
+  const standaloneMessages = messages.filter((msg) => !msg.replyTo);
 
-  // Force sender to be "Anonymous" for privacy
-  messages.forEach((msg) => {
+  // Sort newest first
+  standaloneMessages.sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
+
+  // Force sender to be "Anonymous"
+  standaloneMessages.forEach((msg) => {
     msg.senderUsername = 'Anonymous';
   });
 
@@ -18,7 +24,7 @@ const getInbox = async (req, res) => {
 
   res.render('messages/inbox', {
     title: 'Your Inbox',
-    messages, // ← just pass messages, no conversations
+    messages: standaloneMessages, // only original messages
     publicLink,
   });
 };
