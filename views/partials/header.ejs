@@ -1,18 +1,20 @@
 <header class="site-header">
-  <div class="container">
+  <div class="header-container">
     <h1><a href="/">RANN</a></h1>
-    <nav class="main-nav">
-      <a href="/">Home</a>
-      <% if (loggedIn) { %>
-        <a href="/messages/send">Send Message</a>
-        <a href="/messages/inbox">Inbox</a>
-        <a href="/messages/outbox">Outbox</a>
-        <a href="/messages/user/profile">Profile</a>
-        <a href="/auth/logout">Logout (<%= user.username %>)</a>
-      <% } else { %>
-        <a href="/auth/login">Login</a>
-        <a href="/auth/register">Register</a>
-      <% } %>
-    </nav>
+
+    <div class="hamburger" id="hamburger">☰</div>
   </div>
+  <nav class="main-nav" id="main-nav">
+    <a href="/">Home</a>
+    <% if (loggedIn) { %>
+      <a href="/messages/send">Send Message</a>
+      <a href="/messages/inbox">Inbox</a>
+      <a href="/messages/outbox">Outbox</a>
+      <a href="/messages/user/profile">Profile</a>
+      <a href="/auth/logout">Logout (<%= user.username %>)</a>
+    <% } else { %>
+      <a href="/auth/login">Login</a>
+      <a href="/auth/register">Register</a>
+    <% } %>
+  </nav>
 </header>

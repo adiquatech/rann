@@ -1,8 +1,3 @@
-/* ******************************************
- * RANN - Anonymous Messaging App
- * server.js - Main application file
- *******************************************/
-
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 // const env = require('dotenv').config();
@@ -13,7 +8,6 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { initDb } = require('./data/database');
 const baseController = require('./controllers/baseController');
-// We'll create other controllers later
 
 /* ***********************
  * Middleware
@@ -46,9 +40,6 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-
-// app.use(passport.initialize());
-// app.use(passport.session());
 
 /* ***********************
  * View Engine and Templates

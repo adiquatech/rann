@@ -3,77 +3,93 @@ const User = require('../models/userModel');
 const buildLogin = (req, res) => {
   res.render('auth/login', {
     title: 'Login to RANN',
-    messages: res.locals.messages,
+    error: null,
+    success: null,
   });
 };
 
 const buildRegister = (req, res) => {
   res.render('auth/register', {
     title: 'Create RANN Account',
-    messages: res.locals.messages,
+    error: null,
   });
 };
 
 const registerUser = async (req, res) => {
   const { username, email, password } = req.body;
 
+  let error = null;
+
   try {
-    // Check for duplicate username
+    // Check duplicate username
     const existingUsername = await User.findByUsername(username);
     if (existingUsername) {
-      req.flash('error', 'Username already taken.');
-      return res.redirect('/auth/register');
+      error = 'Username already taken.';
     }
 
-    // Check for duplicate email
+    // Check duplicate email
     const existingEmail = await User.findByEmail(email);
     if (existingEmail) {
-      req.flash('error', 'Email already registered.');
-      return res.redirect('/auth/register');
+      error = 'Email already registered.';
+    }
+
+    if (error) {
+      return res.render('auth/register', {
+        title: 'Create RANN Account',
+        error,
+      });
     }
 
     await User.create({ username, email, password });
 
-    req.flash('success', 'Account created! Please log in.');
-
-    const redirectTo = req.session.redirectTo || '/messages/inbox';
-    delete req.session.redirectTo;
-    return res.redirect(redirectTo);
+    // Success — go to login with success message
+    return res.render('auth/login', {
+      title: 'Login to RANN',
+      error: null,
+      success: 'Account created! Please log in.',
+    });
   } catch (err) {
     console.error(err);
-    req.flash('error', 'Registration failed. Try again.');
-    res.redirect('/auth/register');
+    error = 'Registration failed. Try again.';
+    return res.render('auth/register', {
+      title: 'Create RANN Account',
+      error,
+    });
   }
 };
 
 const loginUser = async (req, res) => {
   const { account_email, account_password } = req.body;
 
-  try {
-    let user = null; // ← Fixed: typo "letユーザー" → "let user"
+  let error = null;
 
-    // Try email first
-    user = await User.findByEmail(account_email);
+  try {
+    let user = await User.findByEmail(account_email);
     if (!user) {
-      // Then try username
       user = await User.findByUsername(account_email);
     }
 
     if (!user) {
-      req.flash('error', 'Invalid username/email or password.');
-      return res.redirect('/auth/login');
+      error = 'Invalid username/email or password.';
+    } else {
+      const validPassword = await User.validatePassword(
+        account_password,
+        user.password
+      );
+      if (!validPassword) {
+        error = 'Invalid username/email or password.';
+      }
     }
 
-    const validPassword = await User.validatePassword(
-      account_password,
-      user.password
-    );
-    if (!validPassword) {
-      req.flash('error', 'Invalid username/email or password.');
-      return res.redirect('/auth/login');
+    if (error) {
+      return res.render('auth/login', {
+        title: 'Login to RANN',
+        error,
+        success: null,
+      });
     }
 
-    // Save to session
+    // Login success
     req.session.user = {
       id: user._id,
       username: user.username,
@@ -81,15 +97,16 @@ const loginUser = async (req, res) => {
     };
     req.session.loggedIn = true;
 
-    req.flash('success', `Welcome back, ${user.username}!`);
-
     const redirectTo = req.session.redirectTo || '/';
     delete req.session.redirectTo;
-    return res.redirect(redirectTo); // ← Good: only one redirect
+    return res.redirect(redirectTo);
   } catch (err) {
     console.error(err);
-    req.flash('error', 'Login failed. Try again.');
-    res.redirect('/auth/login');
+    error = 'Login failed. Try again.';
+    return res.render('auth/login', {
+      title: 'Login to RANN',
+      error,
+    });
   }
 };
 

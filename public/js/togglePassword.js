@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 document.querySelectorAll('.toggle-password').forEach((toggle) => {
   toggle.addEventListener('click', () => {
     const input = toggle.previousElementSibling;
