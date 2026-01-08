@@ -22,19 +22,13 @@
       <p class="hint">Share this link — anyone can message you anonymously.</p>
     </div>
 
-    <div class="home-buttons">
-      <a href="/messages/inbox" class="btn-primary">View Inbox</a>
-      <a href="/messages/outbox" class="btn-primary">View Outbox</a>
-      <a href="/messages/user/profile" class="btn-primary">My Profile</a>
-    </div>
-
   <% } else { %>
-    <h1>RANN</h1>
-    <p class="tagline">Send anonymous messages. No names. No judgment.</p>
+  <h1>RANN</h1>
+  <p class="tagline">Send anonymous messages. No names. No judgment.</p>
 
-    <div class="home-buttons">
-      <a href="/auth/login" class="btn-primary">Login</a>
-      <a href="/auth/register" class="btn-success">Register</a>
-    </div>
-  <% } %>
+  <div class="home-buttons">
+    <a href="/auth/login" class="home-btn home-btn-primary">Login</a>
+    <a href="/auth/register" class="home-btn home-btn-success">Register</a>
+  </div>
+<% } %>
 </section>
