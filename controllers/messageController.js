@@ -6,8 +6,6 @@ const { getDb } = require('../data/database');
 
 const getInbox = async (req, res) => {
   const messages = await Message.getByUserId(req.session.user.id);
-
-  // Filter out replies — only show original messages (no replyTo)
   const standaloneMessages = messages.filter((msg) => !msg.replyTo);
 
   // Sort newest first
@@ -24,7 +22,7 @@ const getInbox = async (req, res) => {
 
   res.render('messages/inbox', {
     title: 'Your Inbox',
-    messages: standaloneMessages, // only original messages
+    messages: standaloneMessages,
     publicLink,
     page: 'inbox',
   });
@@ -32,13 +30,8 @@ const getInbox = async (req, res) => {
 
 const getOutbox = async (req, res) => {
   const senderId = req.session.user.id;
-
   const sentMessages = await Message.getBySenderId(senderId);
-
-  // Only keep messages that are NOT replies (no replyTo)
   const standaloneMessages = sentMessages.filter((msg) => !msg.replyTo);
-
-  // Sort newest first
   standaloneMessages.sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   );
@@ -50,10 +43,9 @@ const getOutbox = async (req, res) => {
   }
 
   const publicLink = `${req.protocol}://${req.get('host')}/to/${req.session.user.username}`;
-
   res.render('messages/outbox', {
     title: 'Your Sent Messages',
-    messages: standaloneMessages, // only original messages
+    messages: standaloneMessages,
     publicLink,
     page: 'outbox',
   });
@@ -61,14 +53,14 @@ const getOutbox = async (req, res) => {
 
 const getSend = async (req, res) => {
   const publicLink = `${req.protocol}://${req.get('host')}/to/${req.session.user.username}`;
-
-  // Only get people YOU sent messages to
   const sentMessages = await Message.getBySenderId(req.session.user.id);
 
   // Collect unique receiver IDs
   const receiverIds = new Set();
   sentMessages.forEach((msg) => {
-    if (msg.toUserId) receiverIds.add(msg.toUserId.toString());
+    if (msg.toUserId && msg.toUserId.toString() !== req.session.user.id) {
+      receiverIds.add(msg.toUserId.toString());
+    }
   });
 
   // Fetch users
@@ -110,7 +102,6 @@ const getThread = async (req, res) => {
     }
 
     const replies = await Message.getReplies(messageId);
-
     // Load sender usernames
     const sender = originalMessage.fromUserId
       ? await User.findById(originalMessage.fromUserId)
@@ -168,7 +159,7 @@ const getProfile = (req, res) => {
 };
 
 const reply = async (req, res) => {
-  const { toUserId, text, replyTo } = req.body; // replyTo from hidden input
+  const { toUserId, text, replyTo } = req.body;
 
   if (!text || text.trim().length === 0) {
     req.flash('error', 'Reply cannot be empty.');
@@ -180,7 +171,7 @@ const reply = async (req, res) => {
       toUserId,
       fromUserId: req.session.user.id,
       text: text.trim(),
-      replyTo: replyTo || null, // link to original message
+      replyTo: replyTo || null,
     });
 
     req.flash('success', 'Reply sent anonymously!');
