@@ -1,37 +1,40 @@
-<% if (loggedIn) { %>
-  <h1>Welcome back, <%= user.username %>!</h1>
+<!-- views/home.ejs -->
+<section class="home-content">
+  <% if (loggedIn) { %>
+    <h1>Welcome back, <%= user.username %>!</h1>
 
-  <div class="profile-pic-wrapper">
-    <div class="profile-pic-circle">
-      <img src="/images/placeholder.jpg" alt="Profile picture" class="profile-pic">
+    <div class="profile-section">
+      <div class="profile-pic">
+        <img src="/images/placeholder.jpg" alt="Profile picture">
+      </div>
+      <p class="username">@<%= user.username %></p>
     </div>
-    <p class="username-display"><%= user.username %></p>
-  </div>
 
-  <p>RANN lets you send and receive messages completely anonymously.</p>
-  <p>No names. No judgment. Just truth.</p>
+    <p class="tagline">Send and receive messages completely anonymously.</p>
+    <p class="tagline">No names. No judgment. Just truth.</p>
 
-  <div class="public-link-section">
-    <p><strong>Your link:</strong></p>
-    <div class="link-box">
-      <code id="publicLink"><%= publicLink %></code>
-      <button onclick="copyLink()" class="copy-btn">Copy</button>
+    <div class="public-link-section">
+      <p class="label">Your anonymous link:</p>
+      <div class="link-box">
+        <code id="publicLink"><%= publicLink %></code>
+        <button onclick="copyLink()" class="copy-btn">Copy</button>
+      </div>
+      <p class="hint">Share this link — anyone can message you anonymously.</p>
     </div>
-    <p class="share-hint">Share this link to receive anonmessages from anyone.</p>
-  </div>
 
-  <div class="home-buttons">
-    <a href="/messages/inbox" class="btn-primary">View Inbox</a>
-    <a href="/messages/outbox" class="btn-primary">View Outbox</a>
-    <a href="/messages/user/profile" class="btn-primary">My Profile</a>
-  </div>
+    <div class="home-buttons">
+      <a href="/messages/inbox" class="btn-primary">View Inbox</a>
+      <a href="/messages/outbox" class="btn-primary">View Outbox</a>
+      <a href="/messages/user/profile" class="btn-primary">My Profile</a>
+    </div>
 
   <% } else { %>
     <h1>RANN</h1>
-    <p>Send anonymous messages. No names. No judgment.</p>
+    <p class="tagline">Send anonymous messages. No names. No judgment.</p>
+
     <div class="home-buttons">
       <a href="/auth/login" class="btn-primary">Login</a>
       <a href="/auth/register" class="btn-success">Register</a>
     </div>
   <% } %>
-</div>
+</section>

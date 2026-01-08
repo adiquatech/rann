@@ -1,20 +1,39 @@
-<div class="inbox-container">
-  <h1>My Profile</h1>
+<!-- views/user/profile.ejs -->
+<section class="profile-page">
+  <div class="container">
+    <h1>My Profile</h1>
 
-  <div class="profile-card">
-    <div class="profile-pic-wrapper">
-    <div class="profile-pic-circle">
-      <img src="/images/placeholder.jpg" alt="Profile picture" class="profile-pic">
-      <div class="edit-icon">✏️</div>
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="profile-pic-wrapper">
+          <img src="/images/placeholder.jpg" alt="Profile picture" class="profile-pic">
+          <div class="edit-overlay">
+            <span class="edit-icon">✏️</span>
+            <span class="edit-text">Change Photo</span>
+          </div>
+        </div>
+
+        <h2>@<%= user.username %></h2>
+      </div>
+
+      <div class="profile-info">
+        <p><strong>Email:</strong> <%= user.email %></p>
+
+        <div class="public-link-section">
+          <p class="label">Your Anonymous Link:</p>
+          <div class="link-box">
+            <code id="publicLink"><%= publicLink %></code>
+            <button onclick="copyLink()" class="copy-btn">Copy</button>
+          </div>
+          <p class="hint">Share this link — anyone can send you messages anonymously.</p>
+        </div>
+
+        <div class="profile-actions">
+          <a href="/messages/inbox" class="btn-primary">View Inbox</a>
+          <a href="/messages/outbox" class="btn-primary">View Outbox</a>
+          <a href="/messages/send" class="btn-primary">Send Message</a>
+        </div>
+      </div>
     </div>
   </div>
-
-    <p><strong>Username:</strong> <%= user.username %></p>
-    <p><strong>Email:</strong> <%= user.email %></p>
-    <p><strong>Public Link:</strong> <code><%= publicLink %></code></p>
-    <p>Share this link to receive anonymous messages.</p>
-
-    <a href="/messages/inbox" class="btn-primary">View Inbox</a>
-    <a href="/messages/outbox" class="btn-primary">View Outbox</a>
-  </div>
-</div>
+</section>

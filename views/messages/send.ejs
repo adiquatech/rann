@@ -1,32 +1,42 @@
-<h1>Send Anonymous Message</h1>
+<section class="send-page">
+  <div class="container">
+    <h1>Send Anonymous Message</h1>
 
-<div class="public-link-section">
-    <p><strong>Your secret link:</strong></p>
-    <div class="link-box">
-      <code id="publicLink"><%= publicLink %></code>
-      <button onclick="copyLink()" class="copy-btn">Copy</button>
+    <div class="public-link-section">
+      <p class="label">Your Anonymous Link:</p>
+      <div class="link-box">
+        <code id="publicLink"><%= publicLink %></code>
+        <button onclick="copyLink()" class="copy-btn">Copy</button>
+      </div>
+      <p class="hint">Share this link — anyone can message you anonymously.</p>
     </div>
-    <p class="share-hint">Share this link to receive anonmessages from anyone.</p>
-  </div>
 
-<% if (contacts.length > 0) { %>
-  <h3>Recent Contacts</h3>
-  <div class="contacts-grid">
-    <% contacts.forEach(contact => { %>
-      <a href="/to/<%= contact.username %>" class="contact-card">
-        <div class="contact-avatar">
-          <%= contact.username.charAt(0).toUpperCase() %>
+    <% if (contacts.length > 0) { %>
+      <div class="recent-contacts">
+        <h2>Recent Contacts</h2>
+        <p class="subtitle">Tap a contact to send an anonymous message</p>
+        <div class="contacts-grid">
+          <% contacts.forEach(contact => { %>
+            <a href="/to/<%= contact.username %>" class="contact-card">
+              <div class="contact-avatar">
+                <%= contact.username.charAt(0).toUpperCase() %>
+              </div>
+              <span class="contact-name">@<%= contact.username %></span>
+            </a>
+          <% }) %>
         </div>
-        <span class="contact-name"><%= contact.username %></span>
-      </a>
-    <% }) %>
-  </div>
-<% } %>
+      </div>
+    <% } %>
 
-<div class="manual-send">
-  <h3>Send to new user</h3>
-  <form action="/to" method="get" class="username-form">
-    <input type="text" name="username" placeholder="Enter username" required>
-    <button type="submit">Go</button>
-  </form>
-</div>
+    <div class="manual-send">
+      <h2>Send to New User</h2>
+      <p class="subtitle">Enter a username to start a new conversation</p>
+      <form action="/to" method="get" class="username-form">
+        <div class="input-group">
+          <input type="text" name="username" placeholder="Enter username" required>
+          <button type="submit" class="btn-primary">Send Message</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

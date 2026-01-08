@@ -1,38 +1,39 @@
-<div class="thread-container">
-<a href="/messages/<%= backTo %>" class="back-link">
-  ← Back to <%= backTo.charAt(0).toUpperCase() + backTo.slice(1) %>
-</a>
-  <div class="chat-thread">
-    <!-- Chat Header -->
+<section class="thread-page">
+  <div class="thread-header">
+    <a href="/messages/<%= backTo %>" class="back-link">
+      ← Back to <%= backTo.charAt(0).toUpperCase() + backTo.slice(1) %>
+    </a>
     <div class="chat-header">
       <h2><%= headerName %></h2>
     </div>
+  </div>
 
-    <!-- Messages -->
-    <div class="chat-messages">
+  <div class="chat-container">
+    <div class="chat-messages" id="chatMessages">
       <% const allMessages = [originalMessage, ...replies].sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt)); %>
-      <% allMessages.forEach((msg, index) => { %>
+      <% allMessages.forEach((msg) => { %>
         <div class="chat-message <%= msg.fromUserId?.toString() === user.id ? 'sent' : 'received' %>">
           <div class="message-bubble">
-            <p><%= msg.text %></p>
-            <small class="message-time">
+            <p class="message-text"><%= msg.text %></p>
+            <time class="message-time">
               <%= new Date(msg.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %>
-            </small>
+            </time>
           </div>
         </div>
       <% }) %>
     </div>
 
-    <!-- Reply Form -->
     <% if (originalMessage.fromUserId) { %>
       <div class="reply-form">
         <form action="/messages/reply" method="post">
           <input type="hidden" name="toUserId" value="<%= originalMessage.fromUserId %>">
           <input type="hidden" name="replyTo" value="<%= originalMessage._id %>">
-          <textarea name="text" placeholder="Type your reply..." required></textarea>
-          <button type="submit">Send</button>
+          <div class="input-group">
+            <textarea name="text" placeholder="Type your reply..." required rows="1"></textarea>
+            <button type="submit" class="send-btn">Send</button>
+          </div>
         </form>
       </div>
     <% } %>
   </div>
-</div>
+</section>

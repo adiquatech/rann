@@ -17,7 +17,7 @@ passport.use(
           user = await User.create({
             username: profile.displayName.replace(/\s+/g, '').toLowerCase(),
             email: profile.emails[0].value,
-            password: Math.random().toString(36), // random, not used
+            password: Math.random().toString(36),
           });
         }
         done(null, user);

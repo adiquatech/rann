@@ -1,29 +1,41 @@
-<div class="inbox-container">
-  <h1>Your Sent Messages (Outbox)</h1>
-  
-<% if (messages.length === 0) { %>
-  <p>You haven't sent any messages yet.</p>
-<% } else { %>
-  <% messages.forEach(msg => { %>
-    <a href="/messages/thread/<%= msg._id %>?back=outbox" class="message-link">
-      <div class="message-card">
-        <div class="sender-info">
-          <strong>To: <%= msg.receiverUsername %></strong>
-          <small><%= new Date(msg.createdAt).toLocaleString() %></small>
-        </div>
-        <p><%= msg.text %></p>
+<section class="messages-page">
+  <div class="container">
+    <h1>Your Sent Messages (Outbox)</h1>
+
+    <% if (messages.length === 0) { %>
+      <div class="empty-state">
+        <p class="empty-message">You haven't sent any messages yet.</p>
+        <p class="empty-hint">Send your first anonymous message!</p>
       </div>
-    </a>
-  <% }) %>
-<% } %>
+    <% } else { %>
+      <div class="messages-list">
+        <% messages.forEach(msg => { %>
+          <a href="/messages/thread/<%= msg._id %>?back=outbox" class="message-link">
+            <div class="message-card">
+              <div class="message-header">
+                <strong class="sender">To: <%= msg.receiverUsername %></strong>
+                <time class="date"><%= new Date(msg.createdAt).toLocaleDateString('en-US', { 
+                  weekday: 'short', 
+                  month: 'short', 
+                  day: 'numeric', 
+                  hour: 'numeric', 
+                  minute: '2-digit' 
+                }) %></time>
+              </div>
+              <p class="message-preview"><%= msg.text %></p>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+    <% } %>
 
-  <div class="public-link-section">
-    <p><strong>Your secret link:</strong></p>
-    <div class="link-box">
-      <code id="publicLink"><%= publicLink %></code>
-      <button onclick="copyLink()" class="copy-btn">Copy</button>
+    <div class="public-link-section">
+      <p class="label">Your Anonymous Link:</p>
+      <div class="link-box">
+        <code id="publicLink"><%= publicLink %></code>
+        <button onclick="copyLink()" class="copy-btn">Copy</button>
+      </div>
+      <p class="hint">Share this link — anyone can message you anonymously.</p>
     </div>
-    <p class="share-hint">Share this link to receive anonmessages from anyone.</p>
   </div>
-
-</div>
+</section>

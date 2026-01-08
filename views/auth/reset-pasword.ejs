@@ -1,20 +1,29 @@
-<h1><%= title %></h1>
-<div class="login-container">
-  <form action="/auth/reset-password/<%= token %>" method="post">
-    <div class="form-group password-group">
-      <label for="password">New Password:</label>
-      <div class="password-wrapper">
-        <input type="password" id="password" name="password" required minlength="6" placeholder="Enter new password">
-        <span class="toggle-password" onclick="togglePassword(this)">👁️</span>
+<section class="auth-page">
+  <div class="auth-container">
+    <h1><%= title %></h1>
+
+    <% if (error) { %>
+      <p class="error-text"><%= error %></p>
+    <% } %>
+
+    <form action="/auth/reset-password/<%= token %>" method="post">
+      <div class="form-group password-group">
+        <label for="password">New Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="password" name="password" required minlength="6" placeholder="Enter new password">
+          <span class="toggle-password" onclick="togglePassword(this)">👁️</span>
+        </div>
       </div>
-    </div>
-    <div class="form-group password-group">
-      <label for="confirm">Confirm Password:</label>
-      <div class="password-wrapper">
-        <input type="password" id="confirm" name="confirm" required minlength="6" placeholder="Confirm new password">
-        <span class="toggle-password" onclick="togglePassword(this)">👁️</span>
+
+      <div class="form-group password-group">
+        <label for="confirm">Confirm Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="confirm" name="confirm" required minlength="6" placeholder="Confirm new password">
+          <span class="toggle-password" onclick="togglePassword(this)">👁️</span>
+        </div>
       </div>
-    </div>
-    <button type="submit" class="login-button">Reset Password</button>
-  </form>
-</div>
+
+      <button type="submit" class="btn-primary">Reset Password</button>
+    </form>
+  </div>
+</section>
