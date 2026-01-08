@@ -36,25 +36,12 @@ router.get(
   }
 );
 
-// Facebook OAuth
-router.get(
-  '/facebook',
-  passport.authenticate('facebook', { scope: ['email'] })
-);
-
-router.get(
-  '/facebook/callback',
-  passport.authenticate('facebook', { failureRedirect: '/auth/login' }),
-  (req, res) => {
-    req.flash('success', `Welcome, ${req.user.username}!`);
-    res.redirect('/messages/inbox');
-  }
-);
-
 // GET forgot password page
 router.get('/forgot-password', (req, res) => {
   res.render('auth/forgot-password', {
     title: 'Forgot Password',
+    error: null,
+    success: null,
   });
 });
 

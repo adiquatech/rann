@@ -1,22 +1,28 @@
 <section class="public-send-page">
-  <div class="container">
-    <h1>Send Anonymous Message</h1>
-    <p class="subtitle">To <strong>@<%= receiver.username %></strong></p>
+  <div class="public-send-wrapper">
+    <header class="page-header">
+      <h1>Send Anonymous Message</h1>
+      <p class="subtitle">To <strong>@<%= receiver.username %></strong></p>
+    </header>
 
     <div class="public-send-container">
-      <p class="info">Your message will be sent completely anonymously — no name, no trace.</p>
+      <p class="info">
+        Your message will be sent <strong>completely anonymously</strong> — no name, no email, no trace.
+      </p>
 
       <form action="/to/<%= receiver.username %>" method="post">
-        <div class="form-group">
+        <div class="textarea-group">
           <textarea 
             name="text" 
-            rows="8" 
-            placeholder="Write your anonymous message here..." 
+            rows="10" 
+            placeholder="Be kind. Be honest. Say what you mean..." 
             required
+            autofocus
           ></textarea>
+          <button type="submit" class="send-btn-icon" aria-label="Send message">
+            <span class="arrow">➤</span>
+          </button>
         </div>
-
-        <button type="submit" class="btn-primary send-btn">Send Anonymously</button>
       </form>
 
       <p class="back-link">
