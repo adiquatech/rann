@@ -29,14 +29,24 @@
     <% } %>
 
     <div class="manual-send">
-      <h2>Send to New User</h2>
-      <p class="subtitle">Enter a username to start a new conversation</p>
-      <form action="/to" method="get" class="username-form">
-        <div class="input-group">
-          <input type="text" name="username" placeholder="Enter username" required>
-          <button type="submit" class="btn-primary">Send Message</button>
-        </div>
-      </form>
+  <h2>Send to New User</h2>
+  <p class="subtitle">Enter a username to start a new conversation</p>
+  <form id="manualSendForm" class="username-form">
+    <div class="input-group">
+      <input type="text" id="manualUsername" placeholder="Enter username" required autocomplete="off">
+      <button type="submit" class="btn-primary">Send Message</button>
     </div>
+  </form>
+</div>
+
+<script>
+  document.getElementById('manualSendForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = document.getElementById('manualUsername').value.trim();
+    if (username) {
+      window.location.href = `/to/${encodeURIComponent(username)}`;
+    }
+  });
+</script>
   </div>
 </section>

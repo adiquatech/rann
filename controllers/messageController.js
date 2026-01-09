@@ -159,7 +159,7 @@ const getProfile = (req, res) => {
 };
 
 const reply = async (req, res) => {
-  const { toUserId, text, replyTo } = req.body;
+  const { toUserId, text, replyTo, backTo } = req.body;
 
   if (!text || text.trim().length === 0) {
     req.flash('error', 'Reply cannot be empty.');
@@ -180,7 +180,8 @@ const reply = async (req, res) => {
     req.flash('error', 'Failed to send reply.');
   }
 
-  res.redirect('/messages/inbox');
+  // Redirect back to the same thread
+  res.redirect(`/messages/thread/${replyTo}?back=${backTo || 'inbox'}`);
 };
 
 module.exports = {

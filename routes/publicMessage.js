@@ -15,12 +15,24 @@ const requireLogin = (req, res, next) => {
 
 // GET public send page
 router.get('/to/:username', requireLogin, async (req, res) => {
-  const username = req.params.username;
+  const username = req.params.username?.trim();
+
+  // ← ADD THIS VALIDATION
+  if (!username) {
+    req.flash('error', 'Please enter a username.');
+    return res.redirect('/messages/send');
+  }
+
+  if (req.session.user && username === req.session.user.username) {
+    req.flash('error', 'You cannot send anonymous message to yourself.');
+    return res.redirect('/messages/send');
+  }
+
   const user = await User.findByUsername(username);
 
   if (!user) {
     req.flash('error', 'User not found.');
-    return res.redirect('/');
+    return res.redirect('/messages/send');
   }
 
   res.render('messages/public-send', {

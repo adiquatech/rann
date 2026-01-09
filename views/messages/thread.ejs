@@ -1,41 +1,88 @@
 <section class="thread-page">
   <div class="thread-box">
     <div class="thread-header">
+      <a href="/messages/<%= backTo %>" class="back-link">← Back</a>
       <div class="chat-header">
         <h2><%= "@" + headerName %></h2>
       </div>
-      <a href="/messages/<%= backTo %>" class="back-link">
-        ← Back to <%= backTo.charAt(0).toUpperCase() + backTo.slice(1) %>
-      </a>
     </div>
 
     <div class="chat-container">
       <div class="chat-messages" id="chatMessages">
-        <% const allMessages = [originalMessage, ...replies].sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt)); %>
-        <% allMessages.forEach((msg) => { %>
-          <div class="chat-message <%= msg.fromUserId?.toString() === user.id ? 'sent' : 'received' %>">
-            <div class="message-bubble">
-              <p class="message-text"><%= msg.text %></p>
-              <time class="message-time">
-                <%= new Date(msg.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %>
-              </time>
-            </div>
+        <% 
+          const allMessages = [originalMessage, ...replies]
+            .sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
+          let lastDate = null;
+        %>
+
+        <% allMessages.forEach((msg) => { 
+          const msgDate = new Date(msg.createdAt);
+          const today = new Date();
+          const isToday = msgDate.toDateString() === today.toDateString();
+          const isYesterday = msgDate.toDateString() === new Date(today.setDate(today.getDate()-1)).toDateString();
+
+          const msgDateStr = msgDate.toLocaleDateString('en-GB', {
+            weekday: 'short',
+            day: 'numeric',
+            month: 'short'
+          });
+
+          // Demarcation logic
+          if (lastDate !== msgDate.toDateString()) {
+            lastDate = msgDate.toDateString();
+        %>
+          <div class="date-demarcation">
+            <% if (isToday) { %>
+              Today
+            <% } else if (isYesterday) { %>
+              Yesterday
+            <% } else { %>
+              <%= msgDateStr %>
+            <% } %>
           </div>
+        <% } %>
+
+        <div class="chat-message <%= msg.fromUserId?.toString() === user.id ? 'sent' : 'received' %>">
+          <div class="message-bubble">
+            <p class="message-text"><%= msg.text %></p>
+            <time class="message-time">
+                <%= msgDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %>
+            </time>
+          </div>
+        </div>
         <% }) %>
       </div>
+      <script>
+          const chatMessages = document.getElementById('chatMessages');
+          if (chatMessages) {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+          }
+        </script>
+
 
       <% if (originalMessage.fromUserId) { %>
-        <div class="reply-form">
-          <form action="/messages/reply" method="post">
-            <input type="hidden" name="toUserId" value="<%= originalMessage.fromUserId %>">
-            <input type="hidden" name="replyTo" value="<%= originalMessage._id %>">
-            <div class="input-group">
-              <textarea name="text" placeholder="Type your reply..." required rows="1"></textarea>
-              <button type="submit" class="send-btn"><span>➤</span></button>
-            </div>
-          </form>
-        </div>
-      <% } %>
+  <div class="reply-form">
+    <form action="/messages/reply" method="post">
+  <input type="hidden" name="toUserId" value="<%= originalMessage.fromUserId %>">
+  <input type="hidden" name="replyTo" value="<%= originalMessage._id %>">
+  <input type="hidden" name="backTo" value="<%= backTo %>">  <!-- ← ADD THIS LINE -->
+  <div class="input-group">
+    <textarea name="text" placeholder="Type your reply..." required rows="1"></textarea>
+    <button type="submit" class="send-btn"><span>➤</span></button>
+  </div>
+  <script>
+  document.getElementById('manualSendForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = document.getElementById('manualUsername').value.trim();
+    if (username) {
+      window.location.href = `/to/${encodeURIComponent(username)}`;
+    }
+  });
+</script>
+
+</form>
+  </div>
+<% } %>
     </div>
   </div>
 </section>
