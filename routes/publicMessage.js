@@ -8,7 +8,7 @@ const requireLogin = (req, res, next) => {
   if (!req.session.loggedIn) {
     req.session.redirectTo = req.originalUrl; // Remember where they wanted to go
     req.flash('info', 'Please login or register to send a message.');
-    return res.redirect('/auth/register');
+    return res.redirect('/auth/login');
   }
   next();
 };
@@ -19,7 +19,7 @@ router.get('/to/:username', requireLogin, async (req, res) => {
 
   // ← ADD THIS VALIDATION
   if (!username) {
-    req.flash('error', 'Please enter a username.');
+    req.flash('error', 'Invalid username.');
     return res.redirect('/messages/send');
   }
 

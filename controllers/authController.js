@@ -97,7 +97,7 @@ const loginUser = async (req, res) => {
     };
     req.session.loggedIn = true;
 
-    const redirectTo = req.session.redirectTo || '/';
+    const redirectTo = req.session.redirectTo || '/messages/inbox';
     delete req.session.redirectTo;
     return res.redirect(redirectTo);
   } catch (err) {
