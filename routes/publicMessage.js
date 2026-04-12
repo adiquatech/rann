@@ -43,7 +43,7 @@ router.get('/to/:username', requireLogin, async (req, res) => {
 
 // POST save the message
 router.post('/to/:username', requireLogin, async (req, res) => {
-  const username = req.params.username;
+  const username = req.params.username?.trim();
   const { text } = req.body;
 
   if (!text || text.trim() === '') {
@@ -54,7 +54,12 @@ router.post('/to/:username', requireLogin, async (req, res) => {
   const user = await User.findByUsername(username);
   if (!user) {
     req.flash('error', 'User not found.');
-    return res.redirect('/');
+    return res.redirect('/messages/send');
+  }
+
+  if (user._id.toString() === req.session.user.id) {
+    req.flash('error', 'You cannot send a message to yourself.');
+    return res.redirect(`/to/${username}`);
   }
 
   await Message.create({
@@ -64,7 +69,7 @@ router.post('/to/:username', requireLogin, async (req, res) => {
   });
 
   req.flash('success', 'Message sent anonymously! 🎉');
-  res.redirect(`/to/${username}`);
+  res.redirect('/messages/outbox');
 });
 
 module.exports = router;
