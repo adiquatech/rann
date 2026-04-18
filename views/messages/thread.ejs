@@ -78,6 +78,18 @@
       window.location.href = `/to/${encodeURIComponent(username)}`;
     }
   });
+  // Clear textarea after successful reply
+  const replyForm = document.querySelector('.reply-form form');
+  
+  if (replyForm) {
+    replyForm.addEventListener('submit', function() {
+      // Small delay to allow form submission
+      setTimeout(() => {
+        const textarea = this.querySelector('textarea');
+        if (textarea) textarea.value = '';
+      }, 100);
+    });
+  }
 </script>
 
 </form>

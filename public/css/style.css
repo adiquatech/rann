@@ -1041,6 +1041,7 @@ main {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  overflow: hidden;
 }
 
 .chat-messages {
@@ -1122,13 +1123,14 @@ main {
 .reply-form {
   flex-shrink: 0;
   padding: 15px 20px;
-  position: sticky;
-  bottom: 0;
   background: white;
-  padding: 15px 20px;
   border-top: 1px solid #eee;
   box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.08);
   z-index: 10;
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 /* Bigger text on desktop & mobile */
@@ -1202,8 +1204,7 @@ main {
     width: 100%;
     background: var(--dark-color);
     flex-direction: column;
-    text-align: center;
-    z-index: 1000;
+    padding: 20px 0;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   }
 
@@ -1213,8 +1214,7 @@ main {
 
   .main-nav a {
     padding: 20px;
-    font-size: 1.6rem;
-    color: white;
+    font-size: 1.4rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
