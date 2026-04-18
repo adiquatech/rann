@@ -38,8 +38,12 @@ router.get('/to/:username', requireLogin, async (req, res) => {
   res.render('messages/public-send', {
     title: `Send to ${username}`,
     receiver: user,
+    success: req.flash('success')[0] || null,
+    error: req.flash('error')[0] || null,
   });
 });
+
+// POST save the message
 
 // POST save the message
 router.post('/to/:username', requireLogin, async (req, res) => {
@@ -51,25 +55,32 @@ router.post('/to/:username', requireLogin, async (req, res) => {
     return res.redirect(`/to/${username}`);
   }
 
-  const user = await User.findByUsername(username);
-  if (!user) {
-    req.flash('error', 'User not found.');
-    return res.redirect('/messages/send');
+  try {
+    const receiver = await User.findByUsername(username);
+
+    if (!receiver) {
+      req.flash('error', 'User not found.');
+      return res.redirect('/messages/send');
+    }
+
+    if (receiver._id.toString() === req.session.user.id) {
+      req.flash('error', 'You cannot send a message to yourself.');
+      return res.redirect(`/to/${username}`);
+    }
+
+    await Message.create({
+      toUserId: receiver._id,
+      fromUserId: req.session.user.id,
+      text: text.trim(),
+    });
+
+    req.flash('success', `Message sent anonymously to @${username} 🎉`);
+    res.redirect('/messages/outbox');
+  } catch (err) {
+    console.error(err);
+    req.flash('error', 'Failed to send message. Please try again.');
+    res.redirect(`/to/${username}`);
   }
-
-  if (user._id.toString() === req.session.user.id) {
-    req.flash('error', 'You cannot send a message to yourself.');
-    return res.redirect(`/to/${username}`);
-  }
-
-  await Message.create({
-    toUserId: user._id,
-    fromUserId: req.session.user.id,
-    text: text.trim(),
-  });
-
-  req.flash('success', 'Message sent anonymously! 🎉');
-  res.redirect('/messages/outbox');
 });
 
 module.exports = router;

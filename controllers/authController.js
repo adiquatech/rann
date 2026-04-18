@@ -16,7 +16,11 @@ const buildRegister = (req, res) => {
 };
 
 const registerUser = async (req, res) => {
-  const { username, email, password } = req.body;
+  let { username, email, password } = req.body;
+
+  // Clean inputs
+  username = username.trim().toLowerCase();
+  email = email.trim().toLowerCase();
 
   let error = null;
 
@@ -40,13 +44,23 @@ const registerUser = async (req, res) => {
       });
     }
 
+    // Prevent spaces in username
+    if (username.includes(' ')) {
+      error = 'Username cannot contain spaces.';
+      return res.render('auth/register', {
+        title: 'Create RANN Account',
+        error,
+      });
+    }
+
+    // Create user with cleaned data
     await User.create({ username, email, password });
 
-    // Success — go to login with success message
+    // Success
     return res.render('auth/login', {
       title: 'Login to RANN',
       error: null,
-      success: 'Account created! Please log in.',
+      success: 'Account created successfully! Please log in.',
     });
   } catch (err) {
     console.error(err);
@@ -59,12 +73,17 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-  const { account_email, account_password } = req.body;
+  let { account_email, account_password } = req.body;
+
+  // Clean input - trim and convert to lowercase
+  account_email = account_email.trim().toLowerCase();
 
   let error = null;
 
   try {
+    // Try to find user by email or username (both lowercase)
     let user = await User.findByEmail(account_email);
+
     if (!user) {
       user = await User.findByUsername(account_email);
     }
@@ -99,6 +118,7 @@ const loginUser = async (req, res) => {
 
     const redirectTo = req.session.redirectTo || '/messages/inbox';
     delete req.session.redirectTo;
+
     return res.redirect(redirectTo);
   } catch (err) {
     console.error(err);

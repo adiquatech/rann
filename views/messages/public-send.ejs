@@ -29,5 +29,17 @@
         <a href="/">← Back to Home</a>
       </p>
     </div>
+    <% if (success) { %>
+        <div class="success-message">
+          <strong>✅ Message Sent Successfully!</strong><br>
+          Your anonymous message has been delivered to @<%= receiver.username %>.
+        </div>
+      <% } %>
+
+      <% if (error) { %>
+        <div class="error-message">
+          <%= error %>
+        </div>
+      <% } %>
   </div>
 </section>
